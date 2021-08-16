@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 from tqdm import tqdm
 
-from torchvision import models
+import torchvision.models as models
 
 import torch.nn as nn
 

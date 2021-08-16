@@ -19,6 +19,14 @@ pip3 install virtualenv
 ```
 virtualenv <env_name>
 ```
+- Activating the virtualenv (Linux)
+```
+source <env_name>/bin/activate
+```
+- Activating the virtualenv (Windows)
+```
+<env_name>/Scripts/Activate
+```
 
 - Install required libraries
 ```English
