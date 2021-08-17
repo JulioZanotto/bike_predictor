@@ -5,23 +5,19 @@ from pathlib import Path
 from PIL import Image
 from tqdm import tqdm
 
-import torchvision.models as models
-
-import torch.nn as nn
-
 from utils import configuration
-from utils.general import test_transforms
+from utils.general import test_transforms, load_model
 
 # Pipeline
 # Cria os folders baseado nas classes
 labs = configuration.label_dict
-Path("/predictions/").mkdir(exist_ok=True)
+Path("./predictions/").mkdir(exist_ok=True)
 
-for key, value in labs:
-    Path("/predictions/" + value).mkdir(parents=True, exist_ok=True)
+for key, value in labs.items():
+    Path("./predictions/" + value).mkdir(parents=True, exist_ok=True)
 
 # Le o diretorio com as imagens
-image_folder = glob(configuration.image_path)
+image_folder = glob(configuration.image_path + '*.*')
 
 # Carrega o modelo
 # check if CUDA is available
@@ -34,15 +30,7 @@ else:
     device = 'cuda'
     print('CUDA is available!  Training on GPU ...')
 
-model = models.resnet18(pretrained=True)
-model.fc = nn.Sequential(nn.Linear(512, 6))
-
-# Load model
-checkpoint = torch.load(
-        'model_best.pt', map_location='cpu'
-                            )
-model.load_state_dict(checkpoint['model_state_dict'])
-
+model = load_model('modelo_adam.pt')
 model.to(device)
 
 # Pega as imagens e passa pelo modelo
@@ -51,9 +39,9 @@ for image in tqdm(image_folder):
     # Transform Image
     img_transf = test_transforms(img_read)
     # Predict Image
-    ia_result = model(img_transf.unsqueeze(0))
+    ia_result = model(img_transf.unsqueeze(0).to(device))
     # baseado no output
     _, pred = torch.max(ia_result, 1)
     # Move a imagem para o folder
-    folder = labs[pred.detach().cpu()]
+    folder = labs[pred.detach().cpu().item()]
     shutil.move(image, './predictions/' + folder)
