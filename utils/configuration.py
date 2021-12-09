@@ -1,2 +1,3 @@
-label_dict = {0: '1_CARROS', 1: 'BIG_TRAIL', 2: 'CUSTOM', 3: 'ESPORTIVAS', 4: 'OUTROS', 5: 'PASSEIO'}
-image_path = '../../teste_ansu/'
+label_dict = {0: 'BIG_TRAIL', 1: 'BIKES', 2: 'CARROS', 3: 'CHARRETE', 4: 'CUSTOM', 5: 'ESPORTIVAS',
+              6: 'SCOOTER-PASSEIO'}
+image_path = './dataset/*/'
